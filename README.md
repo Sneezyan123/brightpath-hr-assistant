@@ -14,7 +14,7 @@ through LLM tool calls only. Company, people, and policies are fictional.
 | CRISP-DM process | [docs/REPORT.md](docs/REPORT.md) (one section per phase), [docs/crisp_dm_log.md](docs/crisp_dm_log.md) |
 | Evaluation of every component + results | [docs/REPORT.md §5](docs/REPORT.md), [results/eval_report.md](results/eval_report.md) |
 | Agentic coding setup (agents file, skills) | [AGENTS.md](AGENTS.md), [CLAUDE.md](CLAUDE.md), [.claude/skills/](.claude/skills/) |
-| Demo video (≤ 10 min) | link added here after upload; script in [docs/VIDEO_SCRIPT.md](docs/VIDEO_SCRIPT.md) |
+| Demo video (≤ 10 min) | link added here after upload |
 
 - Report (CRISP-DM, diagram, components, evals): [docs/REPORT.md](docs/REPORT.md)
 - Agent instructions: [AGENTS.md](AGENTS.md) · skills: [.claude/skills/](.claude/skills/) · iteration log: [docs/crisp_dm_log.md](docs/crisp_dm_log.md)

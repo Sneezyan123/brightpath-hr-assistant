@@ -73,22 +73,22 @@ written for this project:
 ### 4.1 Data flow
 ```mermaid
 flowchart TD
-    U[User message + signed-in profile] --> R["① Router (LLM call)<br/>intent · topic · slots · standalone question"]
-    R --> IC{"② Information collection<br/>(deterministic)<br/>required slots − given − profile"}
+    U[User message + signed-in profile] --> R["(1) Router (LLM call)<br/>intent · topic · slots · standalone question"]
+    R --> IC{"(2) Information collection<br/>(deterministic)<br/>required slots − given − profile"}
     IC -- missing --> FQ[Ask a follow-up question<br/>store pending state]
     FQ -. next turn .-> R
     IC -- greeting / out of scope --> T[Template reply]
     IC -- sensitive --> REF
-    IC -- policy_question --> RET["③ BM25 retriever<br/>+ topic boost, top-4"]
-    RET --> G{"④ Referral gate<br/>top score ≥ 4.0?"}
-    G -- no --> REF["⑥ HR referral<br/>ticket in hr_tickets"]
-    G -- yes --> ANS["⑤ Answerer (LLM call)<br/>JSON: answer, citations, supported"]
+    IC -- policy_question --> RET["(3) BM25 retriever<br/>+ topic boost, top-4"]
+    RET --> G{"(4) Referral gate<br/>top score ≥ 4.0?"}
+    G -- no --> REF["(6) HR referral<br/>ticket in hr_tickets"]
+    G -- yes --> ANS["(5) Answerer (LLM call)<br/>JSON: answer, citations, supported"]
     ANS --> V{"citations ∈ retrieved<br/>and supported?"}
     V -- no --> REF
     V -- yes --> OUT[Answer + sources]
-    IC -- leave_* --> LA["⑦ Leave agent (LLM tool-calling loop)"]
-    LA <--> TOOLS["⑧ tools.py<br/>balance · create · list · cancel · approvals · decide"]
-    TOOLS --> RULES["⑨ leave_rules.py<br/>(deterministic decisions)"]
+    IC -- leave_* --> LA["(7) Leave agent (LLM tool-calling loop)"]
+    LA <--> TOOLS["(8) tools.py<br/>balance · create · list · cancel · approvals · decide"]
+    TOOLS --> RULES["(9) leave_rules.py<br/>(deterministic decisions)"]
     TOOLS <--> DB[(SQLite: employees,<br/>leave_requests, hr_tickets)]
     REF --> DB
     LA --> OUT2[Status + reason + request id]
@@ -99,15 +99,15 @@ which is shown in the UI's Trace panel and appended to `logs/traces.jsonl`.
 ### 4.2 Components
 | # | Component | Purpose | Input → Output | Model / tool call |
 |---|---|---|---|---|
-| ① | Router `router.py` | Understand the request; rewrite follow-ups into a standalone question | message, last 6 turns, pending state → `{intent, topic, slots, standalone_question}` | 1 LLM call (JSON) |
-| ② | Info collection `agent.py` + `topics.py` | Decide whether we can answer yet; merge follow-up answers | intent, topic, slots, profile → missing slots / proceed | none (rules) |
-| ③ | Retriever `retriever.py` | Find candidate policy sections | question + slot words, topic → top-4 chunks with scores | none (BM25) |
-| ④ | Referral gate | Skip generation for clearly unrelated questions | top score → pass/refer | none |
-| ⑤ | Answerer `answerer.py` | Grounded answer tailored to the employee, with citations | question, chunks, employee details → `{answer, citations, supported}` | 1 LLM call (JSON) |
-| ⑥ | HR referral | Hand over to a human; record it | question, reason → ticket id | DB write |
-| ⑦ | Leave agent `leave_agent.py` | Turn a leave request into tool calls and explain the result | message, slots, history → reply + tool calls | 1–5 LLM calls with tools |
-| ⑧ | Tools `tools.py` | The only access path to leave data; enforces identity and permissions | tool name + args → JSON result | SQLite |
-| ⑨ | Rules `leave_rules.py` | Approve / decline / pending, matching the written policies | employee, type, dates, balance, overlap → decision + reason | none |
+| 1 | Router `router.py` | Understand the request; rewrite follow-ups into a standalone question | message, last 6 turns, pending state → `{intent, topic, slots, standalone_question}` | 1 LLM call (JSON) |
+| 2 | Info collection `agent.py` + `topics.py` | Decide whether we can answer yet; merge follow-up answers | intent, topic, slots, profile → missing slots / proceed | none (rules) |
+| 3 | Retriever `retriever.py` | Find candidate policy sections | question + slot words, topic → top-4 chunks with scores | none (BM25) |
+| 4 | Referral gate | Skip generation for clearly unrelated questions | top score → pass/refer | none |
+| 5 | Answerer `answerer.py` | Grounded answer tailored to the employee, with citations | question, chunks, employee details → `{answer, citations, supported}` | 1 LLM call (JSON) |
+| 6 | HR referral | Hand over to a human; record it | question, reason → ticket id | DB write |
+| 7 | Leave agent `leave_agent.py` | Turn a leave request into tool calls and explain the result | message, slots, history → reply + tool calls | 1–5 LLM calls with tools |
+| 8 | Tools `tools.py` | The only access path to leave data; enforces identity and permissions | tool name + args → JSON result | SQLite |
+| 9 | Rules `leave_rules.py` | Approve / decline / pending, matching the written policies | employee, type, dates, balance, overlap → decision + reason | none |
 
 **Why these choices.** BM25 instead of embeddings: the corpus is small and its vocabulary is precise, BM25
 scores can be explained in the demo, nothing has to be downloaded, and the top score doubles as a
@@ -182,18 +182,18 @@ end-to-end referral F1 below measures the combination.
 Run on 2026-11-15 with `claude-haiku-5-5` (assistant and judge), all 61 cases, `python -m eval.run_eval --calibrate-judge`.
 Full output: [`results/eval_report.md`](../results/eval_report.md).
 
-| Component | Metric | Value | Target | |
+| Component | Metric | Value | Target | Met |
 |---|---|---|---|---|
-| Router (n=61) | intent acc / topic acc | 1.000 / 0.980 | ≥ 0.90 | ✅ |
-| Info collection | follow-up P / R / F1 | 1.000 / 1.000 / 1.000 | ≥ 0.85 | ✅ |
-| Info collection | missing-slot exact match / slot value acc | 1.000 / 1.000 | ≥ 0.85 | ✅ |
-| Retrieval (end-to-end, n=32) | Hit@1 / Recall@4 / MRR | 0.906 / 1.000 / 0.953 | ≥ 0.90 / 0.80 | ✅ |
-| Answer (n=32) | key-fact recall / judge correctness / judge ≥4 | 1.000 / 4.875 / 1.000 | ≥ 0.85 / 4.0 | ✅ |
-| Source support | citation precision / citation recall | **0.854** / 1.000 | ≥ 0.90 | ⚠️ |
-| Source support | judge faithfulness mean / share = 5 | 4.531 / **0.688** | ≥ 4.5 | ⚠️ borderline |
-| Referral (n=44) | precision / recall / F1 | 1.000 / 1.000 / 1.000 | ≥ 0.85 | ✅ |
-| Leave agent (n=17) | tool acc / args acc / final DB status acc | 1.000 / 1.000 / 1.000 | ≥ 0.90 | ✅ |
-| Judge calibration (n=31) | pairwise acc / mean correct vs corrupted | 1.000 / 4.97 vs 1.16 | ≥ 0.9 | ✅ |
+| Router (n=61) | intent acc / topic acc | 1.000 / 0.980 | ≥ 0.90 | yes |
+| Info collection | follow-up P / R / F1 | 1.000 / 1.000 / 1.000 | ≥ 0.85 | yes |
+| Info collection | missing-slot exact match / slot value acc | 1.000 / 1.000 | ≥ 0.85 | yes |
+| Retrieval (end-to-end, n=32) | Hit@1 / Recall@4 / MRR | 0.906 / 1.000 / 0.953 | ≥ 0.90 / 0.80 | yes |
+| Answer (n=32) | key-fact recall / judge correctness / judge ≥4 | 1.000 / 4.875 / 1.000 | ≥ 0.85 / 4.0 | yes |
+| Source support | citation precision / citation recall | **0.854** / 1.000 | ≥ 0.90 | no |
+| Source support | judge faithfulness mean / share = 5 | 4.531 / **0.688** | ≥ 4.5 | borderline |
+| Referral (n=44) | precision / recall / F1 | 1.000 / 1.000 / 1.000 | ≥ 0.85 | yes |
+| Leave agent (n=17) | tool acc / args acc / final DB status acc | 1.000 / 1.000 / 1.000 | ≥ 0.90 | yes |
+| Judge calibration (n=31) | pairwise acc / mean correct vs corrupted | 1.000 / 4.97 vs 1.16 | ≥ 0.9 | yes |
 | Latency | mean per case / router / answerer / leave agent | 2.2 s / 1.0 s / 1.0 s / 1.8 s | — | |
 
 **Error analysis (why the scores aren't higher):**
