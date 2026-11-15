@@ -1,0 +1,572 @@
+{
+  "meta": {
+    "model": "claude-haiku-5-5",
+    "judge": "claude-haiku-5-5",
+    "cases": 61,
+    "llm_network_calls": 220,
+    "llm_cache_hits": 16
+  },
+  "offline": {
+    "retrieval_bm25": {
+      "n": 32,
+      "hit@1": 0.906,
+      "recall@3": 1.0,
+      "recall@4": 1.0,
+      "mrr": 0.943,
+      "misses@4": []
+    },
+    "retrieval_bm25+topic_boost": {
+      "n": 32,
+      "hit@1": 0.906,
+      "recall@3": 1.0,
+      "recall@4": 1.0,
+      "mrr": 0.948,
+      "misses@4": []
+    },
+    "referral_gate": {
+      "auc_answerable_vs_refer": 0.965,
+      "answerable_top_score_min": 5.872,
+      "refer_top_score_max": 10.219,
+      "current_threshold": 4.0,
+      "at_current": {
+        "threshold": 4.0,
+        "precision": 1.0,
+        "recall": 0.375,
+        "f1": 0.545,
+        "answerable_blocked": 0
+      },
+      "sweep": [
+        {
+          "threshold": 0.0,
+          "precision": null,
+          "recall": 0.0,
+          "f1": null,
+          "answerable_blocked": 0
+        },
+        {
+          "threshold": 0.5,
+          "precision": null,
+          "recall": 0.0,
+          "f1": null,
+          "answerable_blocked": 0
+        },
+        {
+          "threshold": 1.0,
+          "precision": null,
+          "recall": 0.0,
+          "f1": null,
+          "answerable_blocked": 0
+        },
+        {
+          "threshold": 1.5,
+          "precision": null,
+          "recall": 0.0,
+          "f1": null,
+          "answerable_blocked": 0
+        },
+        {
+          "threshold": 2.0,
+          "precision": null,
+          "recall": 0.0,
+          "f1": null,
+          "answerable_blocked": 0
+        },
+        {
+          "threshold": 2.5,
+          "precision": 1.0,
+          "recall": 0.125,
+          "f1": 0.222,
+          "answerable_blocked": 0
+        },
+        {
+          "threshold": 3.0,
+          "precision": 1.0,
+          "recall": 0.125,
+          "f1": 0.222,
+          "answerable_blocked": 0
+        },
+        {
+          "threshold": 3.5,
+          "precision": 1.0,
+          "recall": 0.375,
+          "f1": 0.545,
+          "answerable_blocked": 0
+        },
+        {
+          "threshold": 4.0,
+          "precision": 1.0,
+          "recall": 0.375,
+          "f1": 0.545,
+          "answerable_blocked": 0
+        },
+        {
+          "threshold": 4.5,
+          "precision": 1.0,
+          "recall": 0.375,
+          "f1": 0.545,
+          "answerable_blocked": 0
+        },
+        {
+          "threshold": 5.0,
+          "precision": 1.0,
+          "recall": 0.375,
+          "f1": 0.545,
+          "answerable_blocked": 0
+        },
+        {
+          "threshold": 5.5,
+          "precision": 1.0,
+          "recall": 0.375,
+          "f1": 0.545,
+          "answerable_blocked": 0
+        },
+        {
+          "threshold": 6.0,
+          "precision": 0.8,
+          "recall": 0.5,
+          "f1": 0.615,
+          "answerable_blocked": 1
+        },
+        {
+          "threshold": 6.5,
+          "precision": 0.714,
+          "recall": 0.625,
+          "f1": 0.667,
+          "answerable_blocked": 2
+        },
+        {
+          "threshold": 7.0,
+          "precision": 0.75,
+          "recall": 0.75,
+          "f1": 0.75,
+          "answerable_blocked": 2
+        },
+        {
+          "threshold": 7.5,
+          "precision": 0.778,
+          "recall": 0.875,
+          "f1": 0.824,
+          "answerable_blocked": 2
+        },
+        {
+          "threshold": 8.0,
+          "precision": 0.778,
+          "recall": 0.875,
+          "f1": 0.824,
+          "answerable_blocked": 2
+        },
+        {
+          "threshold": 8.5,
+          "precision": 0.7,
+          "recall": 0.875,
+          "f1": 0.778,
+          "answerable_blocked": 3
+        },
+        {
+          "threshold": 9.0,
+          "precision": 0.636,
+          "recall": 0.875,
+          "f1": 0.737,
+          "answerable_blocked": 4
+        },
+        {
+          "threshold": 9.5,
+          "precision": 0.636,
+          "recall": 0.875,
+          "f1": 0.737,
+          "answerable_blocked": 4
+        },
+        {
+          "threshold": 10.0,
+          "precision": 0.636,
+          "recall": 0.875,
+          "f1": 0.737,
+          "answerable_blocked": 4
+        }
+      ],
+      "note": "The gate only blocks clearly unrelated questions; near-misses are left to the answerer's 'supported' flag."
+    },
+    "leave_rules": {
+      "n": 11,
+      "accuracy": 1,
+      "errors": [],
+      "cases": [
+        {
+          "id": "col07",
+          "expected": "approved",
+          "got": "approved",
+          "reason": "Auto-approved: enough balance and notice, no overlap."
+        },
+        {
+          "id": "col08",
+          "expected": "approved",
+          "got": "approved",
+          "reason": "Auto-approved: study leave with enough notice and balance."
+        },
+        {
+          "id": "lv01",
+          "expected": "approved",
+          "got": "approved",
+          "reason": "Auto-approved: enough balance and notice, no overlap."
+        },
+        {
+          "id": "lv02",
+          "expected": "declined",
+          "got": "declined",
+          "reason": "Annual leave of more than 3 working days needs at least 10 calendar days' notice (you gave 7)."
+        },
+        {
+          "id": "lv03",
+          "expected": "declined",
+          "got": "declined",
+          "reason": "Not enough annual leave balance: requested 5 working days, 2 available."
+        },
+        {
+          "id": "lv04",
+          "expected": "pending",
+          "got": "pending",
+          "reason": "Annual leave during the probation period needs manager approval."
+        },
+        {
+          "id": "lv05",
+          "expected": "pending",
+          "got": "pending",
+          "reason": "Annual leave longer than 10 working days needs manager approval."
+        },
+        {
+          "id": "lv06",
+          "expected": "declined",
+          "got": "declined",
+          "reason": "Contractors are not covered by company leave policies; time off follows your service agreement. Please contact your agency or contract owner."
+        },
+        {
+          "id": "lv07",
+          "expected": "approved",
+          "got": "approved",
+          "reason": "Auto-approved: sick leave registered within 7 days."
+        },
+        {
+          "id": "lv09",
+          "expected": "approved",
+          "got": "approved",
+          "reason": "Auto-approved: bereavement leave needs no notice."
+        },
+        {
+          "id": "lv14",
+          "expected": "pending",
+          "got": "pending",
+          "reason": "Parental leave always needs manager approval."
+        }
+      ]
+    }
+  },
+  "online": {
+    "router": {
+      "n": 61,
+      "intent_accuracy": 1,
+      "topic_accuracy": 0.98,
+      "intent_confusions": {}
+    },
+    "info_collection": {
+      "follow_up_decision": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "accuracy": 1.0,
+        "tp": 8,
+        "fp": 0,
+        "fn": 0,
+        "tn": 44,
+        "n": 52
+      },
+      "missing_slots_exact_match": 1,
+      "slot_value_accuracy": 1,
+      "completed_after_follow_up": 1
+    },
+    "retrieval_online": {
+      "n": 32,
+      "hit@1": 0.906,
+      "recall@4": 1.0,
+      "mrr": 0.953,
+      "misses": []
+    },
+    "answer": {
+      "n_answerable": 32,
+      "n_answered": 32,
+      "key_fact_recall_answered": 1.0,
+      "end_to_end_correct_rate": 1,
+      "judge_correctness_mean": 4.875,
+      "judge_correctness_ge4": 1,
+      "low_scored": []
+    },
+    "source_support": {
+      "citation_precision": 0.854,
+      "citation_recall": 1.0,
+      "judge_faithfulness_mean": 4.531,
+      "judge_faithfulness_eq5": 0.688
+    },
+    "referral": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "accuracy": 1.0,
+      "tp": 9,
+      "fp": 0,
+      "fn": 0,
+      "tn": 35,
+      "n": 44,
+      "by_reason": {
+        "unsupported": 8,
+        "sensitive": 1
+      },
+      "false_referrals": [],
+      "missed_referrals": []
+    },
+    "leave_agent": {
+      "n": 17,
+      "tool_selection_accuracy": 1,
+      "argument_accuracy": 1,
+      "final_status_accuracy": 1,
+      "reply_fact_recall": 1.0,
+      "failures": []
+    },
+    "latency_ms": {
+      "per_case_mean": 2189.279,
+      "answer_mean": 1036.905,
+      "hr_referral_mean": 2.767,
+      "info_collection_mean": 0.0,
+      "leave_agent_mean": 1834.525,
+      "referral_gate_mean": 0.0,
+      "retrieval_mean": 0.168,
+      "router_mean": 1026.895,
+      "tool_mean": 2.681
+    },
+    "errors": [],
+    "judge_calibration": {
+      "n": 31,
+      "mean_correct_answer": 4.968,
+      "mean_corrupted_answer": 1.161,
+      "pairwise_accuracy": 1,
+      "faithfulness_pairwise_accuracy": 1,
+      "rows": [
+        {
+          "id": "qa01",
+          "good": 5,
+          "bad": 1,
+          "good_faith": 5,
+          "bad_faith": 1
+        },
+        {
+          "id": "qa02",
+          "good": 5,
+          "bad": 1,
+          "good_faith": 5,
+          "bad_faith": 1
+        },
+        {
+          "id": "qa03",
+          "good": 5,
+          "bad": 1,
+          "good_faith": 5,
+          "bad_faith": 1
+        },
+        {
+          "id": "qa04",
+          "good": 5,
+          "bad": 1,
+          "good_faith": 5,
+          "bad_faith": 1
+        },
+        {
+          "id": "qa05",
+          "good": 5,
+          "bad": 1,
+          "good_faith": 5,
+          "bad_faith": 1
+        },
+        {
+          "id": "qa06",
+          "good": 5,
+          "bad": 1,
+          "good_faith": 5,
+          "bad_faith": 1
+        },
+        {
+          "id": "qa07",
+          "good": 5,
+          "bad": 1,
+          "good_faith": 5,
+          "bad_faith": 1
+        },
+        {
+          "id": "qa08",
+          "good": 5,
+          "bad": 1,
+          "good_faith": 5,
+          "bad_faith": 1
+        },
+        {
+          "id": "qa09",
+          "good": 5,
+          "bad": 1,
+          "good_faith": 5,
+          "bad_faith": 1
+        },
+        {
+          "id": "qa10",
+          "good": 5,
+          "bad": 2,
+          "good_faith": 5,
+          "bad_faith": 2
+        },
+        {
+          "id": "qa11",
+          "good": 5,
+          "bad": 2,
+          "good_faith": 5,
+          "bad_faith": 2
+        },
+        {
+          "id": "qa12",
+          "good": 5,
+          "bad": 1,
+          "good_faith": 5,
+          "bad_faith": 1
+        },
+        {
+          "id": "qa13",
+          "good": 5,
+          "bad": 1,
+          "good_faith": 5,
+          "bad_faith": 1
+        },
+        {
+          "id": "qa14",
+          "good": 5,
+          "bad": 1,
+          "good_faith": 5,
+          "bad_faith": 1
+        },
+        {
+          "id": "qa15",
+          "good": 5,
+          "bad": 1,
+          "good_faith": 5,
+          "bad_faith": 1
+        },
+        {
+          "id": "qa16",
+          "good": 4,
+          "bad": 1,
+          "good_faith": 5,
+          "bad_faith": 1
+        },
+        {
+          "id": "qa17",
+          "good": 5,
+          "bad": 1,
+          "good_faith": 5,
+          "bad_faith": 1
+        },
+        {
+          "id": "qa18",
+          "good": 5,
+          "bad": 1,
+          "good_faith": 5,
+          "bad_faith": 1
+        },
+        {
+          "id": "qa19",
+          "good": 5,
+          "bad": 1,
+          "good_faith": 5,
+          "bad_faith": 1
+        },
+        {
+          "id": "qa20",
+          "good": 5,
+          "bad": 1,
+          "good_faith": 5,
+          "bad_faith": 1
+        },
+        {
+          "id": "qa21",
+          "good": 5,
+          "bad": 1,
+          "good_faith": 5,
+          "bad_faith": 1
+        },
+        {
+          "id": "qa22",
+          "good": 5,
+          "bad": 1,
+          "good_faith": 5,
+          "bad_faith": 1
+        },
+        {
+          "id": "qa23",
+          "good": 5,
+          "bad": 2,
+          "good_faith": 5,
+          "bad_faith": 2
+        },
+        {
+          "id": "qa24",
+          "good": 5,
+          "bad": 1,
+          "good_faith": 5,
+          "bad_faith": 2
+        },
+        {
+          "id": "qa25",
+          "good": 5,
+          "bad": 1,
+          "good_faith": 5,
+          "bad_faith": 1
+        },
+        {
+          "id": "qa26",
+          "good": 5,
+          "bad": 1,
+          "good_faith": 4,
+          "bad_faith": 3
+        },
+        {
+          "id": "col01",
+          "good": 5,
+          "bad": 1,
+          "good_faith": 5,
+          "bad_faith": 1
+        },
+        {
+          "id": "col02",
+          "good": 5,
+          "bad": 2,
+          "good_faith": 5,
+          "bad_faith": 2
+        },
+        {
+          "id": "col03",
+          "good": 5,
+          "bad": 1,
+          "good_faith": 5,
+          "bad_faith": 1
+        },
+        {
+          "id": "col05",
+          "good": 5,
+          "bad": 1,
+          "good_faith": 5,
+          "bad_faith": 1
+        },
+        {
+          "id": "col06",
+          "good": 5,
+          "bad": 2,
+          "good_faith": 5,
+          "bad_faith": 2
+        }
+      ]
+    }
+  }
+}
